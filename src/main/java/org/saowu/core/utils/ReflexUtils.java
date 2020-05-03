@@ -20,7 +20,7 @@ public class ReflexUtils {
      * @param map          请求数据
      * @return
      */
-    public static Object call(String path, String request_type, Map<String, String> map) {
+    public static Object call(String path, String request_type, Map<String, Object> map) {
         if (ContextConfig.routesMap.containsKey(path)) {
             RouteInfo classFullPath = ContextConfig.routesMap.get(path);
             if (classFullPath.request_type.getMethod().equals(request_type)) {

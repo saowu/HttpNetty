@@ -24,7 +24,7 @@ public class HttpRequestUtils {
      * @return uri
      * @throws IOException
      */
-    public static String parseRequestData(FullHttpRequest request, Map<String, String> params) throws IOException {
+    public static String parseRequestData(FullHttpRequest request, Map<String, Object> params) throws IOException {
         String method = request.method().name();
         //处理中文乱码
         String uri = URLDecoder.decode(request.uri(), "UTF-8");
@@ -49,7 +49,7 @@ public class HttpRequestUtils {
             } else if ("application/json".equals(raw)) {
                 //json数据解析
                 String json = request.content().toString(StandardCharsets.UTF_8);
-                Map<String, String> map = JSON.parseObject(json, params.getClass());
+                Map<String, Object> map = JSON.parseObject(json, params.getClass());
                 for (String key : map.keySet()) {
                     params.put(key, map.get(key));
                 }

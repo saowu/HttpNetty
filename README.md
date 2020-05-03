@@ -16,7 +16,7 @@
 public class IndexController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/test")
-    public String test(Map<String, String> map) {
+    public String test(Map<String, Object> map) {
         return JSONObject.toJSONString(map);
     }
 }
@@ -42,22 +42,22 @@ Process finished with exit code 130 (interrupted by signal 2: SIGINT)
 - 将GET、PUOST、PUT、DELETE请求数据统一解析成Map,无论是`multipart/form-data`还是`application/json`
 ```
      @RequestMapping(method = RequestMethod.POST, path = "/test")
-     public String test(Map<String, String> map) {
+     public String test(Map<String, Object> map) {
          return JSONObject.toJSONString(map);
      }
  
      @RequestMapping(method = RequestMethod.GET, path = "/test1")
-     public String test1(Map<String, String> map) {
+     public String test1(Map<String, Object> map) {
          return JSONObject.toJSONString(map);
      }
  
      @RequestMapping(method = RequestMethod.PUT, path = "/test2")
-     public String test2(Map<String, String> map) {
+     public String test2(Map<String, Object> map) {
          return JSONObject.toJSONString(map);
      }
  
      @RequestMapping(method = RequestMethod.DELETE, path = "/test3")
-     public String test3(Map<String, String> map) {
+     public String test3(Map<String, Object> map) {
          return JSONObject.toJSONString(map);
      }
 

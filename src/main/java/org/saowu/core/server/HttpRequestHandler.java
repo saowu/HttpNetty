@@ -26,7 +26,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
         }
         //解析请求
         String request_type = req.method().name();
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         String uri = HttpRequestUtils.parseRequestData(req, params);
         //打印日志
         System.err.println("Netty Server : " + new SimpleDateFormat("yyy-MM-dd hh:mm:ss").format(new Date()) + " " + request_type + " -> " + uri);
