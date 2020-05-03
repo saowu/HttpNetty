@@ -10,6 +10,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
 import org.saowu.core.utils.AnnotationUtils;
 import org.saowu.core.utils.IOUtils;
 
@@ -54,7 +55,8 @@ public class BootServer {
                             //http 编解码
                             pipeline.addLast(new HttpServerCodec());
                             //http 消息聚合器
-                            pipeline.addLast(new HttpObjectAggregator(512 * 1024));
+                            pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
+                            pipeline.addLast(new HttpServerExpectContinueHandler());
                             //http 请求处理器
                             pipeline.addLast(new HttpRequestHandler());
                         }
