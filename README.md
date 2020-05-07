@@ -1,5 +1,5 @@
 # HttpNetty
->低仿Springboot的项目(学习休闲所做)
+>基于Netty的Http服务器(学习休闲所做)
 
 ### 技术特点
 ```
