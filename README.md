@@ -64,7 +64,6 @@ Process finished with exit code 130 (interrupted by signal 2: SIGINT)
 ```
 ### 项目结构
 ```
-.
 ├── README.md
 ├── pom.xml
 └── src
@@ -88,7 +87,8 @@ Process finished with exit code 130 (interrupted by signal 2: SIGINT)
     │   │               │   └── Template.java
     │   │               ├── server
     │   │               │   ├── BootServer.java
-    │   │               │   └── HttpRequestHandler.java
+    │   │               │   ├── HttpRequestHandler.java
+    │   │               │   └── InitCenter.java
     │   │               └── utils
     │   │                   ├── AnnotationUtils.java
     │   │                   ├── HttpRequestUtils.java
@@ -96,8 +96,10 @@ Process finished with exit code 130 (interrupted by signal 2: SIGINT)
     │   │                   ├── ReflexUtils.java
     │   │                   └── ResponseUtils.java
     │   └── resources
-    │       └── templates
-    │           └── index.html
+    │       ├── static
+    │       ├── templates
+    │       │   └── index.html
+    │       └── upload
     └── test
         └── java
             └── org
