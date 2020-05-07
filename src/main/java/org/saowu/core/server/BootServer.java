@@ -21,21 +21,15 @@ import java.net.InetSocketAddress;
  */
 public class BootServer {
 
-    private final int port;
+    private int port;
 
     public BootServer() {
-        this.port = 9000;
-        new AnnotationUtils();
-        IOUtils.bannerRead();
-        System.err.println("Netty Server : http://127.0.0.1:" + port);
+        this(9000);
     }
 
     public BootServer(int port) {
         this.port = port;
-        new AnnotationUtils();
-        IOUtils.bannerRead();
-        System.err.println("Netty Server : http://127.0.0.1:" + port);
-
+        new InitCenter(9000);
     }
 
     public void start() throws Exception {
@@ -55,7 +49,8 @@ public class BootServer {
                             //http 编解码
                             pipeline.addLast(new HttpServerCodec());
                             //http 消息聚合器
-                            pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
+                            pipeline.addLast(new HttpObjectAggregator(1024 * 1024 * 1024));
+                            //100 Continue
                             pipeline.addLast(new HttpServerExpectContinueHandler());
                             //http 请求处理器
                             pipeline.addLast(new HttpRequestHandler());

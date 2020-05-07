@@ -13,17 +13,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.netty.handler.codec.http.HttpUtil.is100ContinueExpected;
-
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) throws Exception {
-        //100 Continue
-        if (is100ContinueExpected(req)) {
-            ctx.write(new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
-        }
         //解析请求
         String request_type = req.method().name();
         Map<String, Object> params = new HashMap<>();

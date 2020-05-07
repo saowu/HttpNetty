@@ -33,7 +33,7 @@ public class IOUtils {
      * 读取template
      */
     public static String templateRead(String template_name) {
-        File file = new File(System.getProperty("user.dir") + ContextConfig.TEMPLATES + template_name);
+        File file = new File(ContextConfig.TEMPLATES + template_name);
         FileReader reader = null;
         StringBuffer stringBuffer = new StringBuffer();
         try {
@@ -50,4 +50,17 @@ public class IOUtils {
         return stringBuffer.toString();
     }
 
+    /**
+     * 判断文件夹是否存在
+     *
+     * @param dirPath
+     * @return
+     */
+    public static String isChartPathExist(String dirPath) {
+        File file = new File(dirPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return dirPath;
+    }
 }

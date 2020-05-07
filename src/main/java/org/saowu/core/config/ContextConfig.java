@@ -11,7 +11,8 @@ public class ContextConfig {
     //Controller object
     public static final Map<String, Object> beanMap = new HashMap<>();
     //模板目录
-    public static final String TEMPLATES = "/src/main/resources/templates/";
+    public static final String TEMPLATES = System.getProperty("user.dir") + "/src/main/resources/templates/";
     //静态文件目录
-    public static final String STATIC = "/src/main/resources/static/";
+    public static final String STATIC = System.getProperty("user.dir") + "/src/main/resources/static/";
+    public static final String UPLOAD = System.getProperty("user.dir") + "/src/main/resources/upload/";
 }

@@ -2,10 +2,10 @@ package org.saowu.core.utils;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
-import io.netty.handler.codec.http.multipart.Attribute;
-import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
-import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import io.netty.handler.codec.http.multipart.*;
+import org.saowu.core.config.ContextConfig;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -55,8 +55,21 @@ public class HttpRequestUtils {
                 for (Map.Entry<String, Object> attr : map.entrySet()) {
                     params.put(attr.getKey(), attr.getValue());
                 }
-            } else if ("multipart/form-data".equals(raw)) {
-                //TODO 表单文件上传
+            } else if ("multipart/form-data".equals(raw.split(";")[0])) {
+                //表单文件解析,postman测试失败
+                HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(request);
+                List<InterfaceHttpData> bodyHttpDatas = decoder.getBodyHttpDatas();
+                for (InterfaceHttpData data : bodyHttpDatas) {
+                    if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
+                        FileUpload fileUpload = (FileUpload) data;
+                        String filename = fileUpload.getFilename();
+                        if (fileUpload.isCompleted()) {
+                            StringBuffer fileNameBuf = new StringBuffer();
+                            fileNameBuf.append(IOUtils.isChartPathExist(ContextConfig.UPLOAD)).append(filename);
+                            fileUpload.renameTo(new File(fileNameBuf.toString()));
+                        }
+                    }
+                }
             } else {
                 System.err.println("Not Resolve Content-Type:" + raw);
             }

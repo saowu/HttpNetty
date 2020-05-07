@@ -13,9 +13,9 @@ import java.net.URL;
 
 public class AnnotationUtils {
 
-    public AnnotationUtils() {
+    public AnnotationUtils(String pkg) {
         //扫描目录
-        scanAnnotations("org.saowu");
+        scanAnnotations(pkg);
     }
 
     /**
