@@ -64,6 +64,7 @@ Process finished with exit code 130 (interrupted by signal 2: SIGINT)
 ```
 ### 项目结构
 ```
+.
 ├── README.md
 ├── pom.xml
 └── src
@@ -105,6 +106,8 @@ Process finished with exit code 130 (interrupted by signal 2: SIGINT)
             └── org
                 └── saowu
                     └── AppTest.java
+
+20 directories, 21 files
 
 ```
 ### siege压力测试
