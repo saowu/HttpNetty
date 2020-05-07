@@ -8,7 +8,7 @@ import org.saowu.core.pojo.Template;
 
 import java.util.Map;
 
-@Controller(path = "/index")
+@Controller
 public class IndexController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/test")
@@ -31,7 +31,7 @@ public class IndexController {
         return JSONObject.toJSONString(map);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/test4")
+    @RequestMapping(method = RequestMethod.GET, path = "/")
     public Template test4(Map<String, Object> map) {
         return new Template("index.html");
     }
