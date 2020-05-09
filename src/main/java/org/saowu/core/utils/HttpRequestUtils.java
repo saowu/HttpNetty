@@ -2,7 +2,6 @@ package org.saowu.core.utils;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.*;
 import org.saowu.core.config.ContextConfig;
@@ -12,6 +11,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 工具类
@@ -31,13 +32,34 @@ public class HttpRequestUtils {
         String uri = URLDecoder.decode(request.uri(), "UTF-8");
 
         if ("GET".equals(method) || "DELETE".equals(method)) {
-            //URI解析
-            QueryStringDecoder queryDecoder = new QueryStringDecoder(uri);
-            Map<String, List<String>> parameters = queryDecoder.parameters();
-            for (Map.Entry<String, List<String>> attr : parameters.entrySet()) {
-                params.put(attr.getKey(), attr.getValue().get(0));
+            //解析URL
+            if (Pattern.matches("^/static/(.*?)", uri)) {
+                //start  有待优化
+                String url = request.uri().split("[?=&]+")[0];
+                Pattern pattern = Pattern.compile("/static/(.*)");
+                Matcher matcher = pattern.matcher(url);
+                String group = "";
+                if (matcher.find()) {
+                    group = matcher.group(1);
+                }
+                //end
+                if (Pattern.matches("^/static/css(.*?)", uri)) {
+                    uri = "/static/css";
+                } else if (Pattern.matches("^/static/js(.*?)", uri)) {
+                    uri = "/static/js";
+                } else if (Pattern.matches("^/static/img(.*?)", uri)) {
+                    uri = "/static/img";
+                }
+                params.put("file", group);
+            } else {
+                //URI解析
+                QueryStringDecoder queryDecoder = new QueryStringDecoder(uri);
+                Map<String, List<String>> parameters = queryDecoder.parameters();
+                for (Map.Entry<String, List<String>> attr : parameters.entrySet()) {
+                    params.put(attr.getKey(), attr.getValue().get(0));
+                }
+                uri = queryDecoder.path();
             }
-            uri = queryDecoder.path();
         } else if ("POST".equals(method) || "PUT".equals(method)) {
             String raw = request.headers().get("Content-Type");
             if ("application/x-www-form-urlencoded".equals(raw)) {
@@ -63,11 +85,7 @@ public class HttpRequestUtils {
                     if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
                         FileUpload fileUpload = (FileUpload) data;
                         String filename = fileUpload.getFilename();
-                        if (fileUpload.isCompleted()) {
-                            StringBuffer fileNameBuf = new StringBuffer();
-                            fileNameBuf.append(IOUtils.isChartPathExist(ContextConfig.UPLOAD)).append(filename);
-                            fileUpload.renameTo(new File(fileNameBuf.toString()));
-                        }
+                        params.put(filename, fileUpload);
                     }
                 }
             } else {

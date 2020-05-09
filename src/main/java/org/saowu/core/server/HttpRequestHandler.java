@@ -23,8 +23,8 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
         Map<String, Object> params = new HashMap<>();
         String uri = HttpRequestUtils.parseRequestData(req, params);
         //打印日志
-        System.err.println("Netty Server : " + new SimpleDateFormat("yyy-MM-dd hh:mm:ss").format(new Date()) + " " + request_type + " -> " + uri);
-        //路由分配返回数据
+        System.err.println("Http Netty : " + new SimpleDateFormat("yyy-MM-dd hh:mm:ss").format(new Date()) + " " + request_type + " -> " + uri);
+        //映射路由，执行api
         Object result = ReflexUtils.call(uri, request_type, params);
         // 封装http响应
         FullHttpResponse response = ResponseUtils.getFullHttpResponse(result);

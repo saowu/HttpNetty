@@ -3,11 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link type="text/css" rel="styleSheet" href="../static/css/index.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<form action="http://localhost:9000/index/test" method="post" enctype="multipart/form-data">
-    　　<input id="File1" runat="server" name="UpLoadFile" type="file"/>
-    　　<input type="submit" name="Button" value="上传" id="Button"/>
-</form>
+<div class="container">
+    <h1 class="font-read">index.css</h1>
+    <img src="../static/img/picture.png" class="img-fluid" alt="Responsive image">
+
+    <form action="/test" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="exampleInputEmail1">File1</label>
+            <input type="file" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">File2</label>
+            <input type="file" class="form-control" id="exampleInputPassword1">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script type="application/javascript" src="../static/js/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

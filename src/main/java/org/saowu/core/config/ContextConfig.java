@@ -14,5 +14,6 @@ public class ContextConfig {
     public static final String TEMPLATES = System.getProperty("user.dir") + "/src/main/resources/templates/";
     //静态文件目录
     public static final String STATIC = System.getProperty("user.dir") + "/src/main/resources/static/";
+    //上传文件目录
     public static final String UPLOAD = System.getProperty("user.dir") + "/src/main/resources/upload/";
 }

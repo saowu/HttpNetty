@@ -16,6 +16,7 @@ public class AnnotationUtils {
     public AnnotationUtils(String pkg) {
         //扫描目录
         scanAnnotations(pkg);
+        System.err.println("Http Netty : Annotation scanning completed");
     }
 
     /**
@@ -25,7 +26,7 @@ public class AnnotationUtils {
      */
     private void scanAnnotations(final String pkg) {
         String pkgDir = pkg.replaceAll("\\.", "/");
-        URL url = getClass().getClassLoader().getResource(pkgDir);
+        URL url = this.getClass().getClassLoader().getResource(pkgDir);
         File file = new File(url.getFile());
         File files[] = file.listFiles(_file -> {
             String file_name = _file.getName();
@@ -39,6 +40,7 @@ public class AnnotationUtils {
             }
             return false;
         });
+
         for (File _file : files) {
             String file_name = _file.getName();
             //去除.class以后的文件名
@@ -76,5 +78,4 @@ public class AnnotationUtils {
             }
         }
     }
-
 }

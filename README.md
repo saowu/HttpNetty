@@ -5,8 +5,7 @@
 ```
 1.使用Netty作为http服务器
 2.支持注解@Controller、@RequestMapping
-3.maven项目管理
-4.springboot目录结构
+3.利用maven项目管理
 5.简洁的请求数据提取
 6.可返回json、html
  ```

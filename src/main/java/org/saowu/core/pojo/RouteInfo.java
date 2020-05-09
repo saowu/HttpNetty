@@ -14,4 +14,13 @@ public class RouteInfo {
         this.method_name = method_name;
         this.request_type = request_type;
     }
+
+    @Override
+    public String toString() {
+        return "RouteInfo{" +
+                "class_name='" + class_name + '\'' +
+                ", method_name='" + method_name + '\'' +
+                ", request_type=" + request_type +
+                '}';
+    }
 }

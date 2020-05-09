@@ -1,11 +1,16 @@
 package org.saowu.core.utils;
 
+import io.netty.handler.codec.http.multipart.FileUpload;
 import org.saowu.core.annotation.Controller;
 import org.saowu.core.annotation.RequestMapping;
 import org.saowu.core.config.ContextConfig;
 import org.saowu.core.pojo.RequestMethod;
+import org.saowu.core.pojo.SCSS;
+import org.saowu.core.pojo.SIMG;
+import org.saowu.core.pojo.SJS;
 
 import java.io.*;
+import java.util.Map;
 
 @Controller
 public class IOUtils {
@@ -50,6 +55,70 @@ public class IOUtils {
         return stringBuffer.toString();
     }
 
+
+    /**
+     * 读取static css
+     */
+    @RequestMapping(method = RequestMethod.GET, path = "/static/css")
+    public static SCSS cssRead(Map<String, Object> map) {
+        File file = new File(ContextConfig.STATIC + map.get("file"));
+        FileReader reader = null;
+        StringBuffer stringBuffer = new StringBuffer();
+        try {
+            reader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String s = "";
+            while ((s = bufferedReader.readLine()) != null) {
+                stringBuffer.append(s);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new SCSS(stringBuffer.toString());
+    }
+
+
+    /**
+     * 读取static img
+     */
+    @RequestMapping(method = RequestMethod.GET, path = "/static/img")
+    public static SIMG imgRead(Map<String, Object> map) {
+        File file = new File(ContextConfig.STATIC + map.get("file"));
+        try {
+            InputStream fis = new BufferedInputStream(new FileInputStream(file));
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            return new SIMG(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new SIMG(null);
+    }
+
+    /**
+     * 读取static js
+     */
+    @RequestMapping(method = RequestMethod.GET, path = "/static/js")
+    public static SJS jsRead(Map<String, Object> map) {
+        File file = new File(ContextConfig.STATIC + map.get("file"));
+        FileReader reader = null;
+        StringBuffer stringBuffer = new StringBuffer();
+        try {
+            reader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String s = "";
+            while ((s = bufferedReader.readLine()) != null) {
+                stringBuffer.append(s);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new SJS(stringBuffer.toString());
+    }
+
     /**
      * 判断文件夹是否存在
      *
@@ -63,4 +132,37 @@ public class IOUtils {
         }
         return dirPath;
     }
+
+    /**
+     * saveFileUpload
+     *
+     * @param filename
+     * @param object   FileUpload
+     * @return filepath
+     */
+    public static String saveFileUpload(String filename, Object object) {
+        if (filename.isEmpty()) {
+            return null;
+        }
+        try {
+            if (object instanceof FileUpload) {
+                FileUpload fileUpload = (FileUpload) object;
+                if (fileUpload.isCompleted()) {
+                    StringBuffer fileNameBuf = new StringBuffer();
+                    fileNameBuf.append(IOUtils.isChartPathExist(ContextConfig.UPLOAD)).append(filename);
+                    fileUpload.renameTo(new File(fileNameBuf.toString()));
+                    return fileNameBuf.toString();
+                } else {
+                    throw new RuntimeException("object not is Completed");
+                }
+            } else {
+                throw new RuntimeException("object not instanceof FileUpload");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }
