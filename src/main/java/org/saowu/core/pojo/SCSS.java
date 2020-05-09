@@ -1,7 +1,8 @@
 package org.saowu.core.pojo;
 
-import org.saowu.core.utils.IOUtils;
-
+/**
+ * css文件
+ */
 public class SCSS {
     private String text;
 

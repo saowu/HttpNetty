@@ -1,5 +1,8 @@
 package org.saowu.core.pojo;
 
+/**
+ * img
+ */
 public class SIMG {
 
     private byte[] byte_text;

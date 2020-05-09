@@ -1,5 +1,8 @@
 package org.saowu.core.pojo;
 
+/**
+ * js
+ */
 public class SJS {
     private String text;
 
