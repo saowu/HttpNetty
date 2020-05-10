@@ -2,7 +2,7 @@
 > 我不想学Struts2绝不是因为它有漏洞，因为我自己写的漏洞更多......
 
 
-👉[GitHub](https://github.com/saowu/HttpNetty)
+👉[Blog](https://saowu.top/blog/dnlLkMdxz/)
 
 ## 技术特点
 ```
