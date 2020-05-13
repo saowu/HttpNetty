@@ -1,7 +1,9 @@
 package org.saowu.core.config;
 
 import org.saowu.core.pojo.RouteInfo;
+import org.saowu.core.utils.PoolUtils;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,4 +18,6 @@ public class ContextConfig {
     public static final String STATIC = System.getProperty("user.dir") + "/src/main/resources/static/";
     //上传文件目录
     public static final String UPLOAD = System.getProperty("user.dir") + "/src/main/resources/upload/";
+
+    public static final Connection connection = new PoolUtils().getConnection();
 }
