@@ -19,16 +19,22 @@ public class TestDao {
     private PoolUtils poolUtils;
 
     public List<Files> selectAll() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = poolUtils.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM t_files");
-            ResultSet resultSet = preparedStatement.executeQuery();
+            connection = poolUtils.getConnection();
+            preparedStatement = connection.prepareStatement("SELECT * FROM t_files");
+            resultSet = preparedStatement.executeQuery();
             List<Files> filesList = new ResultSetUtils<Files>().mapRersultSetToObject(resultSet, Files.class);
             return filesList;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            poolUtils.close(connection, preparedStatement, resultSet);
         }
         return null;
+
     }
 
 }
