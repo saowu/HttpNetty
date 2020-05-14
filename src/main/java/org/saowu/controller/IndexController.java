@@ -10,10 +10,7 @@ import org.saowu.core.utils.IOUtils;
 import org.saowu.core.utils.ResultSetMapper;
 import org.saowu.entity.Files;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,26 +58,22 @@ public class IndexController {
     }
 
     /**
-     * 数据库链接池
+     * 数据库连接
      *
      * @param
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, path = "/db")
-    public Template test5(Map<String, Object> map) {
-
-        ResultSetMapper<Files> resultSetMapper = new ResultSetMapper<Files>();
+    @RequestMapping(method = RequestMethod.GET, path = "/dbtest")
+    public String test5(Map<String, Object> map) {
         try {
-            PreparedStatement preparedStatement = ContextConfig.connection.prepareStatement("SELECT * FROM t_files");
+            Connection connection = ContextConfig.poolUtils.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM t_files");
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<Files> filesList = resultSetMapper.mapRersultSetToObject(resultSet, Files.class);
-            for (Files files : filesList) {
-                System.out.println(files);
-            }
+            List<Files> filesList = new ResultSetMapper<Files>().mapRersultSetToObject(resultSet, Files.class);
+            return JSONObject.toJSONString(filesList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return new Template("index.html");
+        return "";
     }
 }

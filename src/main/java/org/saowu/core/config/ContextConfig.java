@@ -18,6 +18,6 @@ public class ContextConfig {
     public static final String STATIC = System.getProperty("user.dir") + "/src/main/resources/static/";
     //上传文件目录
     public static final String UPLOAD = System.getProperty("user.dir") + "/src/main/resources/upload/";
-
-    public static final Connection connection = new PoolUtils().getConnection();
+    //连接池对象
+    public static final PoolUtils poolUtils = new PoolUtils();
 }

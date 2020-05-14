@@ -14,22 +14,28 @@ import java.util.Properties;
  */
 public class PoolUtils {
 
-    private Connection connection;
+    private HikariDataSource hikariDataSource;
 
     public PoolUtils() {
         try {
             InputStream inputStream = PoolUtils.class.getClassLoader().getResourceAsStream("hikari.properties");
             Properties props = new Properties();
-            props.load(inputStream);
+            if (inputStream != null) {
+                props.load(inputStream);
+            }
             HikariConfig hikariConfig = new HikariConfig(props);
-            HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
-            connection = hikariDataSource.getConnection();
-        } catch (IOException | SQLException e) {
+            hikariDataSource = new HikariDataSource(hikariConfig);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public Connection getConnection() {
-        return this.connection;
+        try {
+            return hikariDataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

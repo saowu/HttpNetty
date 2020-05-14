@@ -5,16 +5,16 @@
 👉[Blog](https://saowu.top/blog/dnlLkMdxz/)
 
 ## 技术特点
-```
+```text
 1.使用Netty作为http服务器
-2.支持注解@Controller、@RequestMapping
+2.支持注解@Controller、@RequestMapping等
 3.利用maven项目管理
 4.简洁的请求数据提取
 6.Java反射技术
 7.HikariCP连接池
  ```
 ## 启动Banner
-```
+```shell
  _   _ _   _         _   _      _   _
 | | | | |_| |_ _ __ | \ | | ___| |_| |_ _   _
 | |_| | __| __| '_ \|  \| |/ _ \ __| __| | | |
@@ -25,7 +25,7 @@
 ```
 
 ## 注解@Controller、@RequestMapping
-```
+```java
 @Controller(path = "/index")
 public class IndexController {
 
@@ -35,7 +35,7 @@ public class IndexController {
     }
 }
 ```
-```
+```shell
 Http Netty : 2020-05-09 04:34:34 GET -> /
 Http Netty : 2020-05-09 04:34:34 GET -> /static/css
 Http Netty : 2020-05-09 04:34:34 GET -> /static/js
@@ -45,16 +45,11 @@ Http Netty : 2020-05-09 04:35:30 POST -> /index/test
 
 ## 请求数据提取
 - 将GET、PUOST、PUT、DELETE请求数据统一解析成Map,无论是`application/x-www-form-urlencoded`、`multipart/form-data`还是`application/json`
-```
+### 解析 application/x-www-form-urlencoded、application/json等
+```java
      @RequestMapping(method = RequestMethod.POST, path = "/test")
      public String test(Map<String, Object> map) {
-        HashMap<String, String> fileInfo = new HashMap<>();
-        for (String key : map.keySet()) {
-            //获取文件对象并保存
-            String path = IOUtils.saveFileUpload(key, map.get(key));
-            fileInfo.put(key, path);
-        }
-        return JSONObject.toJSONString(fileInfo);
+        return JSONObject.toJSONString(map);
      }
  
      @RequestMapping(method = RequestMethod.GET, path = "/test1")
@@ -73,8 +68,79 @@ Http Netty : 2020-05-09 04:35:30 POST -> /index/test
      }
 
 ```
-## 项目结构
+### 解析 multipart/form-data
+```java
+@RequestMapping(method = RequestMethod.POST, path = "/uploadfile")
+     public String uploadfile(Map<String, Object> map) {
+        HashMap<String, String> fileInfo = new HashMap<>();
+        for (String key : map.keySet()) {
+            //获取文件对象并保存
+            String path = IOUtils.saveFileUpload(key, map.get(key));
+            fileInfo.put(key, path);
+        }
+        return JSONObject.toJSONString(fileInfo);
+     }
 ```
+
+## 数据库连接池
+### hikari.properties
+```text
+jdbcUrl=jdbc:mysql://localhost:3306/test?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+driverClassName=com.mysql.jdbc.Driver
+dataSource.user=root
+dataSource.password=123456
+dataSource.connectionTimeout=30000
+dataSource.idleTimeout=600000
+dataSource.maxLifetime=1800000
+dataSource.maximumPoolSize=30
+```
+### Entity Class
+```java
+@Entity
+public class Files {
+    @Column(name = "id")
+    private String id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "path")
+    private String path;
+
+    @Column(name = "type")
+    private String type;
+
+    public String getId() {
+        return id;
+    }
+
+  /*Getter、Setter*/
+}
+
+```
+### demo
+```java
+@RequestMapping(method = RequestMethod.GET, path = "/dbtest")
+    public String test5(Map<String, Object> map) {
+        try {
+            Connection connection = ContextConfig.poolUtils.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM t_files");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Files> filesList = new ResultSetMapper<Files>().mapRersultSetToObject(resultSet, Files.class);
+            return JSONObject.toJSONString(filesList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+```
+
+
+
+
+
+## 项目结构
+```shell script
 .
 ├── README.md
 ├── pom.xml
@@ -86,31 +152,38 @@ Http Netty : 2020-05-09 04:35:30 POST -> /index/test
     │   │           ├── Application.java
     │   │           ├── controller
     │   │           │   └── IndexController.java
-    │   │           └── core
-    │   │               ├── annotation
-    │   │               │   ├── Controller.java
-    │   │               │   └── RequestMapping.java
-    │   │               ├── banner
-    │   │               ├── config
-    │   │               │   └── ContextConfig.java
-    │   │               ├── pojo
-    │   │               │   ├── RequestMethod.java
-    │   │               │   ├── RouteInfo.java
-    │   │               │   ├── SCSS.java
-    │   │               │   ├── SIMG.java
-    │   │               │   ├── SJS.java
-    │   │               │   └── Template.java
-    │   │               ├── server
-    │   │               │   ├── BootServer.java
-    │   │               │   ├── HttpRequestHandler.java
-    │   │               │   └── InitCenter.java
-    │   │               └── utils
-    │   │                   ├── AnnotationUtils.java
-    │   │                   ├── HttpRequestUtils.java
-    │   │                   ├── IOUtils.java
-    │   │                   ├── ReflexUtils.java
-    │   │                   └── ResponseUtils.java
+    │   │           ├── core
+    │   │           │   ├── annotation
+    │   │           │   │   ├── Column.java
+    │   │           │   │   ├── Controller.java
+    │   │           │   │   ├── Entity.java
+    │   │           │   │   └── RequestMapping.java
+    │   │           │   ├── banner
+    │   │           │   ├── config
+    │   │           │   │   └── ContextConfig.java
+    │   │           │   ├── pojo
+    │   │           │   │   ├── RequestMethod.java
+    │   │           │   │   ├── RouteInfo.java
+    │   │           │   │   ├── SCSS.java
+    │   │           │   │   ├── SIMG.java
+    │   │           │   │   ├── SJS.java
+    │   │           │   │   └── Template.java
+    │   │           │   ├── server
+    │   │           │   │   ├── BootServer.java
+    │   │           │   │   ├── HttpRequestHandler.java
+    │   │           │   │   └── InitCenter.java
+    │   │           │   └── utils
+    │   │           │       ├── AnnotationUtils.java
+    │   │           │       ├── HttpRequestUtils.java
+    │   │           │       ├── IOUtils.java
+    │   │           │       ├── PoolUtils.java
+    │   │           │       ├── ReflexUtils.java
+    │   │           │       ├── ResponseUtils.java
+    │   │           │       └── ResultSetMapper.java
+    │   │           └── entity
+    │   │               └── Files.java
     │   └── resources
+    │       ├── hikari.properties
     │       ├── static
     │       │   ├── css
     │       │   │   └── index.css
@@ -127,13 +200,9 @@ Http Netty : 2020-05-09 04:35:30 POST -> /index/test
                 └── saowu
                     └── AppTest.java
 
-23 directories, 27 files
+24 directories, 33 files
+
 ```
-## Browser Console
-![](https://saowu.top/blog/post-images/1589013914038.png)
-
-
-
 
 ## siege压力测试
 `siege -c 200 -r 100 http://127.0.0.1:9000/index/test1`
