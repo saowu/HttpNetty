@@ -1,5 +1,5 @@
 # HttpNetty
-> 我不想学Struts2绝不是因为它有漏洞，因为我自己写的漏洞更多......
+> 我不想用Struts2绝不是因为它有漏洞，因为我自己写的漏洞更多......
 
 
 👉[Blog](https://saowu.top/blog/dnlLkMdxz/)
