@@ -2,6 +2,7 @@ package org.saowu.core.utils;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.saowu.core.annotation.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import java.util.Properties;
 /**
  * 初始化数据库链接池
  */
+@Component
 public class PoolUtils {
 
     private HikariDataSource hikariDataSource;
@@ -28,6 +30,7 @@ public class PoolUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.err.println("Http Netty : PoolUtils Initialization complete");
     }
 
     public Connection getConnection() {

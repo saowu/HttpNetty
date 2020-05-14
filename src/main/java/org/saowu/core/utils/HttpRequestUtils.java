@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.*;
-import org.saowu.core.config.ContextConfig;
 
 import java.io.*;
 import java.net.URLDecoder;

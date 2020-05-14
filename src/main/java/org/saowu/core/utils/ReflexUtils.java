@@ -1,7 +1,7 @@
 package org.saowu.core.utils;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.saowu.core.config.ContextConfig;
+import org.saowu.core.config.ApplicationContext;
 import org.saowu.core.pojo.RouteInfo;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,11 +21,11 @@ public class ReflexUtils {
      * @return
      */
     public static Object call(String path, String request_type, Map<String, Object> map) {
-        if (ContextConfig.routesMap.containsKey(path)) {
-            RouteInfo classFullPath = ContextConfig.routesMap.get(path);
+        if (ApplicationContext.routeMap.containsKey(path)) {
+            RouteInfo classFullPath = ApplicationContext.routeMap.get(path);
             if (classFullPath.request_type.getMethod().equals(request_type)) {
                 try {
-                    Object object = ContextConfig.beanMap.get(classFullPath.class_name);
+                    Object object = ApplicationContext.beanMap.get(classFullPath.class_name);
                     Method method = object.getClass().getDeclaredMethod(classFullPath.method_name, Map.class);
                     return method.invoke(object, map);
                 } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {

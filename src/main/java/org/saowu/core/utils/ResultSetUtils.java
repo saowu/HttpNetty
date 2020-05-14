@@ -13,7 +13,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.saowu.core.annotation.Column;
 import org.saowu.core.annotation.Entity;
 
-public class ResultSetMapper<T> {
+public class ResultSetUtils<T> {
     /**
      * ResultSet转Entity
      *

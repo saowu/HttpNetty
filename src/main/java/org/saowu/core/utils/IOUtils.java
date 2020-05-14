@@ -3,7 +3,7 @@ package org.saowu.core.utils;
 import io.netty.handler.codec.http.multipart.FileUpload;
 import org.saowu.core.annotation.Controller;
 import org.saowu.core.annotation.RequestMapping;
-import org.saowu.core.config.ContextConfig;
+import org.saowu.core.config.ApplicationContext;
 import org.saowu.core.pojo.RequestMethod;
 import org.saowu.core.pojo.SCSS;
 import org.saowu.core.pojo.SIMG;
@@ -38,7 +38,7 @@ public class IOUtils {
      * 读取template
      */
     public static String templateRead(String template_name) {
-        File file = new File(ContextConfig.TEMPLATES + template_name);
+        File file = new File(ApplicationContext.TEMPLATES + template_name);
         FileReader reader = null;
         StringBuffer stringBuffer = new StringBuffer();
         try {
@@ -60,8 +60,8 @@ public class IOUtils {
      * 读取static css
      */
     @RequestMapping(method = RequestMethod.GET, path = "/static/css")
-    public static SCSS cssRead(Map<String, Object> map) {
-        File file = new File(ContextConfig.STATIC + map.get("file"));
+    public SCSS cssRead(Map<String, Object> map) {
+        File file = new File(ApplicationContext.STATIC + map.get("file"));
         FileReader reader = null;
         StringBuffer stringBuffer = new StringBuffer();
         try {
@@ -83,8 +83,8 @@ public class IOUtils {
      * 读取static img
      */
     @RequestMapping(method = RequestMethod.GET, path = "/static/img")
-    public static SIMG imgRead(Map<String, Object> map) {
-        File file = new File(ContextConfig.STATIC + map.get("file"));
+    public SIMG imgRead(Map<String, Object> map) {
+        File file = new File(ApplicationContext.STATIC + map.get("file"));
         try {
             InputStream fis = new BufferedInputStream(new FileInputStream(file));
             byte[] buffer = new byte[fis.available()];
@@ -101,8 +101,8 @@ public class IOUtils {
      * 读取static js
      */
     @RequestMapping(method = RequestMethod.GET, path = "/static/js")
-    public static SJS jsRead(Map<String, Object> map) {
-        File file = new File(ContextConfig.STATIC + map.get("file"));
+    public SJS jsRead(Map<String, Object> map) {
+        File file = new File(ApplicationContext.STATIC + map.get("file"));
         FileReader reader = null;
         StringBuffer stringBuffer = new StringBuffer();
         try {
@@ -149,7 +149,7 @@ public class IOUtils {
                 FileUpload fileUpload = (FileUpload) object;
                 if (fileUpload.isCompleted()) {
                     StringBuffer fileNameBuf = new StringBuffer();
-                    fileNameBuf.append(IOUtils.isChartPathExist(ContextConfig.UPLOAD)).append(filename);
+                    fileNameBuf.append(IOUtils.isChartPathExist(ApplicationContext.UPLOAD)).append(filename);
                     fileUpload.renameTo(new File(fileNameBuf.toString()));
                     return fileNameBuf.toString();
                 } else {

@@ -10,8 +10,8 @@
 2.支持注解@Controller、@RequestMapping等
 3.利用maven项目管理
 4.简洁的请求数据提取
-6.Java反射技术
-7.HikariCP连接池
+6.HikariCP连接池
+7.依赖注入（反射实现）
  ```
 ## 启动Banner
 ```shell
@@ -70,7 +70,7 @@ Http Netty : 2020-05-09 04:35:30 POST -> /index/test
 ```
 ### 解析 multipart/form-data
 ```java
-@RequestMapping(method = RequestMethod.POST, path = "/uploadfile")
+     @RequestMapping(method = RequestMethod.POST, path = "/uploadfile")
      public String uploadfile(Map<String, Object> map) {
         HashMap<String, String> fileInfo = new HashMap<>();
         for (String key : map.keySet()) {
@@ -81,6 +81,22 @@ Http Netty : 2020-05-09 04:35:30 POST -> /index/test
         return JSONObject.toJSONString(fileInfo);
      }
 ```
+
+## 依赖注入 @Autowired
+```java
+@Service
+public class TestService {
+    @Autowired
+    private TestDao testDao;
+
+    public List<Files> selectAll() {
+        List<Files> filesList = testDao.selectAll();
+        return filesList;
+    }
+
+}
+```
+
 
 ## 数据库连接池
 ### hikari.properties
