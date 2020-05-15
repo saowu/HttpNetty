@@ -6,8 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ApplicationContext {
-    //路由<path,RouteInfo>
-    public static final Map<String, RouteInfo> routeMap = new HashMap<>();
+    //路由<String, Map<String, RouteInfo>>
+    public static final Map<String, Map<String, RouteInfo>> routeMap = new HashMap<String, Map<String, RouteInfo>>() {
+        {
+            put("GET", new HashMap<>());
+            put("PUT", new HashMap<>());
+            put("POST", new HashMap<>());
+            put("DELETE", new HashMap<>());
+        }
+    };
     //beans<全路径名,对象>
     public static final Map<String, Object> beanMap = new HashMap<>();
     //模板目录

@@ -21,19 +21,15 @@ public class ReflexUtils {
      * @return
      */
     public static Object call(String path, String request_type, Map<String, Object> map) {
-        if (ApplicationContext.routeMap.containsKey(path)) {
-            RouteInfo classFullPath = ApplicationContext.routeMap.get(path);
-            if (classFullPath.request_type.getMethod().equals(request_type)) {
-                try {
-                    Object object = ApplicationContext.beanMap.get(classFullPath.class_name);
-                    Method method = object.getClass().getDeclaredMethod(classFullPath.method_name, Map.class);
-                    return method.invoke(object, map);
-                } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                    e.printStackTrace();
-                    return HttpResponseStatus.INTERNAL_SERVER_ERROR;
-                }
-            } else {
-                return HttpResponseStatus.METHOD_NOT_ALLOWED;
+        if (ApplicationContext.routeMap.get(request_type).containsKey(path)) {
+            try {
+                RouteInfo classFullPath = ApplicationContext.routeMap.get(request_type).get(path);
+                Object object = ApplicationContext.beanMap.get(classFullPath.class_name);
+                Method method = object.getClass().getDeclaredMethod(classFullPath.method_name, Map.class);
+                return method.invoke(object, map);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+                return HttpResponseStatus.INTERNAL_SERVER_ERROR;
             }
         } else {
             return HttpResponseStatus.NOT_FOUND;

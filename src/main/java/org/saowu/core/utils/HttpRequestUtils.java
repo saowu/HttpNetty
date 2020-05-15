@@ -61,35 +61,36 @@ public class HttpRequestUtils {
             }
         } else if ("POST".equals(method) || "PUT".equals(method)) {
             String raw = request.headers().get("Content-Type");
-            if ("application/x-www-form-urlencoded".equals(raw)) {
-                //表单数据解析
-                String jsonStr = request.content().toString(StandardCharsets.UTF_8);
-                QueryStringDecoder queryDecoder = new QueryStringDecoder(jsonStr, false);
-                Map<String, List<String>> uriAttributes = queryDecoder.parameters();
-                for (Map.Entry<String, List<String>> attr : uriAttributes.entrySet()) {
-                    params.put(attr.getKey(), attr.getValue());
-                }
-            } else if ("application/json".equals(raw)) {
-                //json数据解析
-                String jsonStr = request.content().toString(StandardCharsets.UTF_8);
-                Map<String, Object> map = JSON.parseObject(jsonStr, params.getClass());
-                for (Map.Entry<String, Object> attr : map.entrySet()) {
-                    params.put(attr.getKey(), attr.getValue());
-                }
-            } else if ("multipart/form-data".equals(raw.split(";")[0])) {
-                //表单文件解析,postman测试失败
-                HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(request);
-                List<InterfaceHttpData> bodyHttpDatas = decoder.getBodyHttpDatas();
-                for (InterfaceHttpData data : bodyHttpDatas) {
-                    if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
-                        FileUpload fileUpload = (FileUpload) data;
-                        String filename = fileUpload.getFilename();
-                        params.put(filename, fileUpload);
+            if (raw != null)
+                if ("application/x-www-form-urlencoded".equals(raw)) {
+                    //表单数据解析
+                    String jsonStr = request.content().toString(StandardCharsets.UTF_8);
+                    QueryStringDecoder queryDecoder = new QueryStringDecoder(jsonStr, false);
+                    Map<String, List<String>> uriAttributes = queryDecoder.parameters();
+                    for (Map.Entry<String, List<String>> attr : uriAttributes.entrySet()) {
+                        params.put(attr.getKey(), attr.getValue());
                     }
+                } else if ("application/json".equals(raw)) {
+                    //json数据解析
+                    String jsonStr = request.content().toString(StandardCharsets.UTF_8);
+                    Map<String, Object> map = JSON.parseObject(jsonStr, params.getClass());
+                    for (Map.Entry<String, Object> attr : map.entrySet()) {
+                        params.put(attr.getKey(), attr.getValue());
+                    }
+                } else if ("multipart/form-data".equals(raw.split(";")[0])) {
+                    //表单文件解析,postman测试失败
+                    HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(request);
+                    List<InterfaceHttpData> bodyHttpDatas = decoder.getBodyHttpDatas();
+                    for (InterfaceHttpData data : bodyHttpDatas) {
+                        if (data.getHttpDataType() == InterfaceHttpData.HttpDataType.FileUpload) {
+                            FileUpload fileUpload = (FileUpload) data;
+                            String filename = fileUpload.getFilename();
+                            params.put(filename, fileUpload);
+                        }
+                    }
+                } else {
+                    System.err.println("Not Resolve Content-Type:" + raw);
                 }
-            } else {
-                System.err.println("Not Resolve Content-Type:" + raw);
-            }
             uri = request.uri().split("[?=&]+")[0];
         }
         return uri;

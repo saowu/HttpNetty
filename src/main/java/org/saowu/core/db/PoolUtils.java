@@ -1,4 +1,4 @@
-package org.saowu.core.utils;
+package org.saowu.core.db;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

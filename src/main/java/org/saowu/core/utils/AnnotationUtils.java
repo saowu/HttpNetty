@@ -66,12 +66,13 @@ public class AnnotationUtils {
                             //方法上的注解内容提取
                             RequestMapping annotation = method.getAnnotation(RequestMapping.class);
                             RequestMethod request_type = annotation.method();
-                            String request_path = annotation.path();
+                            String request_path = controller.path() + annotation.path();
+                            Map<String, RouteInfo> stringRouteInfoMap = ApplicationContext.routeMap.get(request_type.getMethod());
                             //put mappingMap
-                            if (controller.path().isEmpty()) {
-                                ApplicationContext.routeMap.put(request_path, new RouteInfo(pkgCls, method.getName(), request_type));
+                            if (!stringRouteInfoMap.containsKey(request_path)) {
+                                stringRouteInfoMap.put(request_path, new RouteInfo(pkgCls, method.getName()));
                             } else {
-                                ApplicationContext.routeMap.put(controller.path() + request_path, new RouteInfo(pkgCls, method.getName(), request_type));
+                                throw new RuntimeException("Route already exists");
                             }
                         }
                     }
@@ -92,7 +93,9 @@ public class AnnotationUtils {
         }
     }
 
-
+    /**
+     * 注入bean
+     */
     private void injectionBean() {
         for (Map.Entry<String, Field> fieldEntry : fields.entrySet()) {
             Field field = fieldEntry.getValue();

@@ -1,9 +1,9 @@
 package org.saowu.entity;
 
 import org.saowu.core.annotation.Column;
-import org.saowu.core.annotation.Entity;
+import org.saowu.core.annotation.Table;
 
-@Entity
+@Table(name = "t_files")
 public class Files {
     @Column(name = "id")
     private String id;

@@ -1,4 +1,4 @@
-package org.saowu.core.utils;
+package org.saowu.core.db;
 
 
 import java.lang.reflect.Field;
@@ -11,30 +11,30 @@ import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.saowu.core.annotation.Column;
-import org.saowu.core.annotation.Entity;
+import org.saowu.core.annotation.Table;
 
-public class ResultSetUtils<T> {
+public class ResultSetUtils {
     /**
      * ResultSet转Entity
      *
      * @param resultSet
-     * @param outputClass
+     * @param aClass
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List<T> mapRersultSetToObject(ResultSet resultSet, Class outputClass) {
+    public static <T> List<T> mapRersultSetToObject(ResultSet resultSet, Class aClass) {
         List<T> outputList = null;
         try {
             // make sure resultset is not null
             if (resultSet != null) {
                 // check if outputClass has 'Entity' annotation
-                if (outputClass.isAnnotationPresent(Entity.class)) {
+                if (aClass.isAnnotationPresent(Table.class)) {
                     // get the resultset metadata
                     ResultSetMetaData rsmd = resultSet.getMetaData();
                     // get all the attributes of outputClass
-                    Field[] fields = outputClass.getDeclaredFields();
+                    Field[] fields = aClass.getDeclaredFields();
                     while (resultSet.next()) {
-                        T bean = (T) outputClass.getDeclaredConstructor().newInstance();
+                        T bean = (T) aClass.getDeclaredConstructor().newInstance();
                         for (int i = 0; i < rsmd.getColumnCount(); i++) {
                             // getting the SQL column name
                             String columnName = rsmd.getColumnName(i + 1);

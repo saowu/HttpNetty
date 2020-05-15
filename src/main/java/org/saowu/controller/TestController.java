@@ -22,20 +22,30 @@ public class TestController {
     @Autowired
     private TestService testService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/test1")
+    @RequestMapping(method = RequestMethod.GET, path = "/files")
     public String test1(Map<String, Object> map) {
-        return JSONObject.toJSONString(map);
+        List<Files> filesList = testService.selectFiles(map);
+        return JSONObject.toJSONString(filesList);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/test2")
+    @RequestMapping(method = RequestMethod.PUT, path = "/files")
     public String test2(Map<String, Object> map) {
-        return JSONObject.toJSONString(map);
+        boolean b = testService.updateFiles(map);
+        return JSONObject.toJSONString(b);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/test3")
+    @RequestMapping(method = RequestMethod.DELETE, path = "/files")
     public String test3(Map<String, Object> map) {
-        return JSONObject.toJSONString(map);
+        boolean b = testService.deteleFiles(map);
+        return JSONObject.toJSONString(b);
     }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/files")
+    public String test6(Map<String, Object> map) {
+        boolean b = testService.insertFiles(map);
+        return JSONObject.toJSONString(b);
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public Template test4(Map<String, Object> map) {
@@ -48,7 +58,7 @@ public class TestController {
      * @param map filename ：FileUpload
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/test")
+    @RequestMapping(method = RequestMethod.POST, path = "/upload")
     public String test(Map<String, Object> map) {
         HashMap<String, String> fileInfo = new HashMap<>();
         for (String key : map.keySet()) {
@@ -59,18 +69,4 @@ public class TestController {
         return JSONObject.toJSONString(fileInfo);
     }
 
-    /**
-     * 数据库连接
-     *
-     * @param
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.GET, path = "/dbtest")
-    public String test5(Map<String, Object> map) {
-        for (String key:ApplicationContext.beanMap.keySet()) {
-            System.out.println(key);
-        }
-        List<Files> filesList = testService.selectAll();
-        return JSONObject.toJSONString(filesList);
-    }
 }
