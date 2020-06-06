@@ -1,19 +1,19 @@
 package org.saowu;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 /**
  * Unit test for simple App.
  */
 public class AppTest {
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswerWithTrue() {
-        assertTrue(true);
-    }
 
+    @Test
+    public void aop() {
+        Suitors proxy = (Suitors) new CglibProxyUtils()
+                .getProxy(Suitors.class
+                        , () -> System.out.println("befor")
+                        , () -> System.out.println("after")
+                );
+        proxy.call();
+    }
 }
