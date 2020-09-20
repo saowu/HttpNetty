@@ -12,10 +12,9 @@ public class ORMUtils {
 
 
     /**
-     * 查询
-     *
-     * @param poolUtils
-     * @param aClass
+     * @param poolUtils 连接池
+     * @param aClass    映射类
+     * @param map       映射参数
      * @param <T>
      * @return
      */
@@ -40,9 +39,9 @@ public class ORMUtils {
 
 
     /**
-     * 插入
-     *
      * @param poolUtils
+     * @param aClass
+     * @param t
      * @param <T>
      * @return
      */
@@ -64,9 +63,9 @@ public class ORMUtils {
 
 
     /**
-     * 删除
-     *
      * @param poolUtils
+     * @param aClass
+     * @param map
      * @param <T>
      * @return
      */
@@ -90,7 +89,16 @@ public class ORMUtils {
     /**
      * 更新
      *
+     * @param poolUtils 连接池
+     * @param <T>       映射类
+     * @return 映射参数
+     */
+
+
+    /**
      * @param poolUtils
+     * @param aClass
+     * @param t
      * @param <T>
      * @return
      */
